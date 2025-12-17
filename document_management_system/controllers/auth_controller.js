@@ -34,8 +34,9 @@ const signupController = async (req, res) => {
 
 const loginController = (req, res) => {
     const { email, password } = req.body
-    console.log("inside login controller", req.body)
-    if (!!email || !password) {
+    console.log("email", email)
+    console.log("password", password)
+    if (!email || !password) {
         return res.status(400).json({ message: "Invalid Credentials" })
 
     }
