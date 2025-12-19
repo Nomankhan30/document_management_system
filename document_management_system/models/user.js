@@ -12,7 +12,11 @@ const userSchema = new mongoose.Schema({
     name: {
         type: String,
     },
-    role: String, //shortcut notation
+    role: {
+        type: String,
+        enum: ["user", "admin"],
+        default: "user"
+    }, //shortcut notation
 
 })
 
