@@ -8,15 +8,22 @@ const generate_token = async (user) => {
     // const role = await userModel.findOne({ email }, { role: 1, _id: 0 })
     // console.log("role is the real culprit", role)
     console.log("before token is returned")
-    return jwt.sign(
+    const accessToken = jwt.sign(
         {
             userId: user._id,
             role: user.role
         },
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" }
-
-
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
     )
+    const refreshToken = jwt.sign(
+        {
+            userId: user._id,
+            role: user.role
+        },
+        process.env.REFRESH_TOKEN_SECRET,
+        { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
+    )
+    return { accessToken, refreshToken }
 }
 export default generate_token

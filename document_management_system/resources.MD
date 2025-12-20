@@ -76,3 +76,33 @@ Body is optional.
 
 Synchronus Version: jwt.verify(token, secret)
 Asynchronous Version: jwt.verify(token, secret, cb())
+
+Need dotenv.config() in EVERY file? NO! Call it ONCE at app startup ONLY.
+
+When the refresh token route is hit, the server verifies the refresh token, checks it against the stored value in the database, rotates it(changes it with new one), and issues a new access token without re-authenticating the user.
+
+Refresh tokens are different (by design)
+Access Token	       Refresh Token
+Short-lived	            Long-lived
+Stateless	            Stateful
+Used on every request	Used rarely
+No DB lookup	        DB lookup allowed
+Optimized for scale	    Optimized for security
+
+JWT enables stateless access tokens, but refresh tokens are intentionally stateful to enable revocation, logout, and reuse detection. In distributed systems, access tokens remain stateless while refresh tokens rely on shared storage, which is an accepted and recommended trade-off.
+
+On every successful login:
+
+🔑 New Access Token is generated
+
+🔄 New Refresh Token is generated
+
+💾 Refresh token is stored/updated in DB
+
+🍪 Cookies are set (or JSON returned for mobile)
+
+If you set a cookie with path: '/api' and then try to set it again with path: '/' (or no path), they're treated as different cookies. The old one won't be overwritten.
+So the rule is:
+Every time you set or update a cookie, use the exact same options (path, domain, httpOnly, secure, sameSite) to ensure you're modifying the existing cookie, not creating a new one.
+
+The Access Token is your "Passport." The Refresh Token is like your "Birth Certificate" you keep it safe and only bring it out when you need a new Passport.
