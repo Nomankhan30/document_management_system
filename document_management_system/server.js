@@ -1,6 +1,5 @@
 import express, { urlencoded } from "express"
 import dotenv from "dotenv"
-import mongoose from "mongoose"
 import dbConnect from "./config/dbConnection.js"
 import authRouter from "./routes/auth_route.js"
 import cookieParser from "cookie-parser"

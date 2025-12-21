@@ -36,7 +36,6 @@ const verifyJWT = (req, res, next) => {
             return res.status(401).json({ message: "Invalidy Token" })
 
         }
-        console.log("resul==", result)
         req.user = data
         console.log("data is my role", req.user)
         console.log("I am middleware before authentication", req.headers)
@@ -46,11 +45,12 @@ const verifyJWT = (req, res, next) => {
     })
 
 
+
 }
 
 const verifyRefreshToken = (req, res, next) => {
     //JWT authentication
-    let RefreshToken;
+    let refreshToken;
     const secret = process.env.REFRESH_TOKEN_SECRET
     console.log("Refresh Token SECRET", secret)
     console.log("Refresh Token req.headers", req.headers)
@@ -69,7 +69,7 @@ const verifyRefreshToken = (req, res, next) => {
     //for web
     else if (req.cookies?.refreshToken) {
         console.log("refresh token cookies", req.cookies)
-        rerfreshToken = req.cookies.refreshToken
+        refreshToken = req.cookies.refreshToken
     }
 
     if (!refreshToken) {
@@ -80,10 +80,9 @@ const verifyRefreshToken = (req, res, next) => {
     const result = jwt.verify(refreshToken, secret, (err, data) => {
         if (err) {
             console.log("ERROR VERIFYING REFRESH TOKEN", err)
-            return res.status(401).json({ message: "Invalid Refresh Token" })
+            return res.status(401).json({ message: "Invalid Refresh Token! Your token may be expired. Login Again" })
 
         }
-        console.log("REFRESH TOKEN RESULT", result)
         req.user = data
         console.log("REFRESH TOKEN REQ.USER", req.user)
         console.log("REFRESH TOKEN middleware before authentication", req.headers)

@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import bcrypt from "bcryptjs"
 const userSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -25,12 +26,19 @@ const userSchema = new mongoose.Schema({
 
 })
 //document level function
-userSchema.methods.comparePassword = async (plainpassword) => {
+userSchema.methods.comparePassword = async function (plainpassword) {
     return await bcrypt.compare(plainpassword, this.password)
 }
-userSchema.pre("save", function () {
-    console.log("REFRESH TOKEN IS HASHED FROM PRE SAVE()")
-    this.refreshToken = hash(this.refreshToken)
+userSchema.pre("save", async function () {
+    if (!this.isModified("refreshToken")) {
+        return  //if nothing changes
+    }
+    console.log("REFRESH TOKEN IS HASHED FROM PRE SAVE()", this.refreshToken)
+    if (this.refreshToken !== null) {
+        console.log("bcrypt se pehlay")
+        this.refreshToken = await bcrypt.hash(this.refreshToken, 11)
+    }
+
 })
 const User = mongoose.model("user", userSchema)
 export default User

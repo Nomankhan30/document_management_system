@@ -12,14 +12,14 @@ const signupController = async (req, res) => {
             return res.status(400).json("User Already Exists!")
         }
         const hashPassword = await bcrypt.hash(password, 11)
-        const { accessToken, refreshToken } = await generateToken(newUser)
         const newUser = new User({
             name,
             email,
             password: hashPassword,
-            refreshToken,
             role: "admin"
         })
+        const { accessToken, refreshToken } = await generateToken(newUser)
+        newUser.refreshToken = refreshToken
         await newUser.save()
         console.log("name USER", newUser)
         console.log("generated accessToken from gT", accessToken)
@@ -29,7 +29,9 @@ const signupController = async (req, res) => {
         res.cookie("refreshToken", refreshToken, getCookieRefreshTokenOptions())
 
         return res.status(201).json({
-            message: "SIGN UP COMPLETED SUCCESSFULLY"
+            message: "SIGN UP COMPLETED SUCCESSFULLY",
+            accessToken,
+            refreshToken
         })
 
     }
@@ -43,6 +45,9 @@ const signupController = async (req, res) => {
 
 const loginController = async (req, res) => {
     const { email, password } = req.body
+    console.log("***************")
+    console.log("req.body bro", req.body)
+    console.log("***************")
     console.log("email", email)
     console.log("password", password)
     if (!email || !password) {
@@ -59,15 +64,20 @@ const loginController = async (req, res) => {
         return res.status(401).json("WRONG PASSWORD")
     }
     const { accessToken, refreshToken } = await generateToken(user)
-    const res = await User.findByIdAndUpdate(req._id, { refreshToken: refreshToken })
-    console.log("user after refresh token updated", res)
-    return res.cookie("accessToken", accessToken, getCookieAccessTokenOptions()).cookies("refreshToken", refreshToken, getCookieRefreshTokenOptions()).status(201).json("LOGIN SUCCESSFUL")
+    const resu = await User.findByIdAndUpdate(user._id, { refreshToken: refreshToken }, { new: true })
+    console.log("user after refresh token updated", resu)
+    return res.cookie("accessToken", accessToken, getCookieAccessTokenOptions()).cookie("refreshToken", refreshToken, getCookieRefreshTokenOptions()).status(201).json({
+        message: "LOGIN SUCCESSFUL",
+        accessToken,
+        refreshToken
+    })
 
 }
 
-const logoutController = (req, res) => {
+const logoutController = async (req, res) => {
     //const user = await User.findByIdAndUpdate(req.user._id, { $set: { refreshToken: null } })
     console.log("logut out controller working")
+    const result = await User.updateOne({ _id: req.user.userId }, { refreshToken: null })
     return res.clearCookie("accessToken", getClearCookieAccessTokenOptions()).clearCookie("refreshToken", getClearCookieRefreshTokenOptions()).status(200).json("LOGOUT SUCCESSFUL")
 
 }

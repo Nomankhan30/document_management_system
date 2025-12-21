@@ -1,5 +1,5 @@
 console.log("INSIDE COOKIES")
-export const getAccessTokenCookieOptions = () => {
+export const getCookieAccessTokenOptions = () => {
     return {
         httpOnly: true,
         secure: true,
@@ -8,7 +8,7 @@ export const getAccessTokenCookieOptions = () => {
     }
 }
 
-export const getClearAccessTokenCookieOptions = () => {
+export const getClearCookieAccessTokenOptions = () => {
     return {
         httpOnly: true,
         secure: true,
@@ -18,7 +18,7 @@ export const getClearAccessTokenCookieOptions = () => {
 
 }
 
-export const getRefreshTokenCookieOptions = () => {
+export const getCookieRefreshTokenOptions = () => {
     return {
         httpOnly: true,
         secure: true,
@@ -28,7 +28,7 @@ export const getRefreshTokenCookieOptions = () => {
     }
 }
 
-export const getClearRefreshTokenCookieOptions = () => {
+export const getClearCookieRefreshTokenOptions = () => {
     return {
         httpOnly: true,
         secure: true,
