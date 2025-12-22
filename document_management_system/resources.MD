@@ -140,3 +140,34 @@ The Goal: It is a "Nuclear Option." We would rather kick out a legitimate user a
 Mongoose next():
 If you use async → NO next()
 If you use next() → NO async
+
+DEBATABLE:
+DONT USE REQ.USER TO RETRUEVE TOKEN INFO
+LOGOUT DOES NOT NEED TO VERIFY JWT
+IF COOKIES NULL IS SENT
+
+multipart/form-data is an HTTP request format used when you need to send files + normal data together.
+
+It exists mainly because files cannot be sent in JSON.
+
+Why do we need multipart/form-data?
+❌ JSON cannot send files
+{
+  "name": "Nom",
+  "avatar": ???   // ❌ file cannot live in JSON
+}
+
+✅ multipart/form-data can
+
+It breaks the request into multiple parts (hence multipart).
+
+Each part can be:
+
+text
+
+number
+
+file (binary)
+
+multipart/form-data is an HTTP encoding type used to send files and form fields together in a single request, commonly used for file uploads.
+

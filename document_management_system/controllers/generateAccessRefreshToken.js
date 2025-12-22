@@ -1,6 +1,6 @@
 import User from "../models/user.js"
-import generate_token from "./generateToken.js"
-import { getCookieAccessTokenOptions, getCookieRefreshTokenOptions } from "./cookieOption.js"
+import generate_token from "../utils/generateToken.js"
+import { getCookieAccessTokenOptions, getCookieRefreshTokenOptions } from "../utils/cookieOption.js"
 import bcrypt from "bcryptjs"
 const generateART = async function (req, res) {
     let incomingToken;

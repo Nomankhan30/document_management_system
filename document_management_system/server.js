@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 import dbConnect from "./config/dbConnection.js"
 import authRouter from "./routes/auth_route.js"
 import cookieParser from "cookie-parser"
+import { upload } from "./config/multer.js"
 dotenv.config()
 const app = express()
 const PORT = process.env.PORT
@@ -17,7 +18,10 @@ app.use("/", (req, res, next) => {
 })
 
 app.use("/api/auth", authRouter)
-
+app.post("/doc/upload", upload.single("avatar"), (req, res) => {
+    console.log("document uploaded sucessfully")
+    res.status(201).json("File Upload Complete")
+})
 
 app.get("/", (req, res) => {
     res.send("HI! WELCOME TO BACKEND CLASSES")

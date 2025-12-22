@@ -3,7 +3,7 @@ import { signupController, loginController, logoutController } from "../controll
 import { verifyJWT, verifyRefreshToken } from "../middleware/auth.js"
 import authController from "../controllers/protectedController.js"
 import permid from "../middleware/permission.js"
-import generateART from "../utils/generateAccessRefreshToken.js"
+import generateART from "../controllers/generateAccessRefreshToken.js"
 const authRouter = express.Router()
 console.log("AUTH ROUTE MAI AYA")
 authRouter.post("/login", loginController)
